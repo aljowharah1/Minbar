@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - منبر</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Background Video -->
+    <div class="container">
+        <video class="back-vid" loop autoplay muted plays-inline src="videos/galaxy.mp4" type="video/mp4"></video>
+    </div>
+
+    <!-- Admin Header -->
+    <header>
+        <nav class="navbar">
+            <img src="images/A.png" alt="Logo" title="logo" width="60" height="60">
+            <h2 class="admin-title">لوحة التحكم الإدارية</h2>
+            <div class="nav-actions">
+                <a href="/" class="back-button">العودة للموقع</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Admin Content -->
+    <main class="admin-main">
+        <div class="admin-container">
+            <!-- Add New Plan Form -->
+            <section class="add-plan-section">
+                <h3>إضافة خطة أسعار جديدة</h3>
+                <form id="add-plan-form" class="plan-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="plan-name">اسم الخطة</label>
+                            <input type="text" id="plan-name" name="planName" placeholder="مثال: الخطة الأساسية" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="is-featured" name="isFeatured">
+                                خطة مميزة (الأكثر شيوعاً)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monthly-price">السعر الشهري (ريال)</label>
+                            <input type="number" id="monthly-price" name="monthlyPrice" placeholder="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="yearly-price">السعر السنوي (ريال)</label>
+                            <input type="number" id="yearly-price" name="yearlyPrice" placeholder="100" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>مميزات الخطة</label>
+                        <div id="features-list">
+                            <div class="feature-input">
+                                <input type="text" name="features[]" placeholder="أدخل ميزة واحدة" required>
+                                <button type="button" class="remove-feature" style="display: none;">×</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-feature" class="add-feature-btn">+ إضافة ميزة أخرى</button>
+                    </div>
+
+                    <button type="submit" class="submit-btn">إضافة الخطة</button>
+                </form>
+            </section>
+
+            <!-- Existing Plans Management -->
+            <section class="manage-plans-section">
+                <h3>إدارة الخطط الحالية</h3>
+                <div class="plans-toolbar">
+                    <button id="delete-selected" class="delete-btn">حذف المحدد</button>
+                    <button id="select-all" class="select-all-btn">تحديد الكل</button>
+                </div>
+                
+                <div id="existing-plans" class="existing-plans">
+                    <!-- Plans will be loaded here dynamically -->
+                  
+                </div>
+            </section>
+        </div>
+    
+
+
+      <!-- Feedback Search -->
+      <section class="feedback-section">
+        <h3>بحث في تعليقات المستخدمين</h3>
+        <form method="GET" action="/admin/feedback/search">
+          <input type="text" name="query" placeholder="ابحث في التعليقات" value="<%= query || '' %>">
+          <button type="submit">بحث</button>
+        </form>
+
+
+        <% if (typeof feedbacks !== 'undefined' && feedbacks.length > 0) { %>
+          <table border="1" class="feedback-table">
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>البريد الإلكتروني</th>
+                <th>الموضوع</th>
+                <th>الرسالة</th>
+                <th>التاريخ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% feedbacks.forEach(fb => { %>
+                <tr>
+                  <td><%= fb.name %></td>
+                  <td><%= fb.email %></td>
+                  <td><%= fb.subject %></td>
+                  <td><%= fb.message %></td>
+                  <td><%= fb.createdAt.toLocaleString() %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else if (typeof feedbacks !== 'undefined') { %>
+          <p>لا توجد نتائج</p>
+        <% } %>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <p style="color:red;"><%= error %></p>
+        <% } %>
+      </section>
+
+    </div>
+  </main>
+
+
+  
+
+    <!-- Success/Error Messages -->
+    <div id="message-container" class="message-container"></div>
+
+  <script src="js/admin.js"></script>
+
+</body>
+</html>
